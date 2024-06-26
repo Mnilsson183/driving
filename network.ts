@@ -22,7 +22,10 @@ class NeuralNetwork{
         return outputs;
     }
 
-    static mutate(network: NeuralNetwork,amount = 1){
+    static mutate(network: NeuralNetwork|null,amount = 1){
+        if(network == null){
+            return;
+        }
         network.levels.forEach(level => {
             for(let i = 0; i < level.biases.length;i++){
                 level.biases[i] = lerp(
@@ -41,6 +44,14 @@ class NeuralNetwork{
                 }
             }
         });
+    }
+    
+    copy(): NeuralNetwork{
+        let network = new NeuralNetwork([]);
+        for(let i = 0; i < this.levels.length;i++){
+            network.levels[i] = this.levels[i].copy();
+        }
+        return network;
     }
 }
 
@@ -65,6 +76,23 @@ class Level{
 
         Level.#randomize(this);
     }
+
+    copy(): Level{
+        let level = new Level(this.inputs.length,this.outputs.length);
+        for(let i = 0; i < this.inputs.length;i++){
+            level.inputs[i] = this.inputs[i];
+        }
+        for(let i = 0; i < this.outputs.length;i++){
+            level.outputs[i] = this.outputs[i];
+            level.biases[i] = this.biases[i];
+        }
+        for(let i = 0; i < this.weights.length;i++){
+            for(let j = 0; j < this.weights[i].length;j++){
+                level.weights[i][j] = this.weights[i][j];
+            }
+        }
+        return level
+    } 
 
     static #randomize(level: Level){
         for(let i = 0; i < level.inputs.length;i++){

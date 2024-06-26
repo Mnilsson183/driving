@@ -14,8 +14,9 @@ class Car{
     controls: Controls;
     useBrain: boolean;
     polygon: any;
+    bonusPoints: number = 0;
 
-    constructor(x: number, y: number, width: number, height: number ,controlType: string ,maxSpeed = 3)
+    constructor([x, y, width, height]: number[], controlType: string, maxSpeed = 3)
     {
         this.x = x;
         this.y = y;
@@ -23,7 +24,7 @@ class Car{
         this.height = height;
 
         this.speed = 0;
-        this.acceleration = 0.2;
+        this.acceleration = 0.1;
         this.maxSpeed = maxSpeed;
         this.friction = 0.05;
         this.angle = 0;
@@ -57,7 +58,6 @@ class Car{
             );
             const outputs = NeuralNetwork.feedForward(offsets,this.brain);
             
-
             if(this.useBrain){
                 this.controls.forward = outputs[0] != 0;
                 this.controls.left = outputs[1] != 0;
@@ -160,5 +160,9 @@ class Car{
         if(this.sensor && drawSensor){
             this.sensor.draw(ctx);
         }
+    }
+
+    calculateScore(): number{
+        return this.y + this.bonusPoints;
     }
 }

@@ -11,6 +11,7 @@ class Road{
     bottom:number;
 
     borders:{x:number,y:number}[][]
+    laneLocations: number[] = [];
 
     constructor(x: number, width: number ,laneCount = 3){
         this.x = x;
@@ -32,6 +33,10 @@ class Road{
             [topLeft,bottomLeft],
             [topRight,bottomRight],
         ];
+
+        for(let i = 0; i < laneCount; i++){
+            this.laneLocations.push(this.getLaneCenter(i));
+        }
     }
 
     getLaneCenter(laneIndex: number){
