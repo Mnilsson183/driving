@@ -21,10 +21,10 @@ class Controls{
         }
     }
     #addKeyboardListeners(){
-        document.onkeydown=(event)=>{
+        document.onkeydown = (event) => {
             switch(event.key){
                 case "ArrowLeft":
-                    this.left=true;
+                    this.left = true;
                     break;
                 case "ArrowRight":
                     this.right = true;
@@ -38,10 +38,10 @@ class Controls{
                             
             }
         }
-        document.onkeyup=(event)=>{
+        document.onkeyup = (event) => {
             switch(event.key){
                 case "ArrowLeft":
-                    this.left=false;
+                    this.left = false;
                     break;
                 case "ArrowRight":
                     this.right = false;

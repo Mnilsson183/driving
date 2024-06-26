@@ -1,3 +1,7 @@
+const RAY_COUNT = 30;
+const RAY_LENGTH = 200;
+const RAY_SPREAD = 4 * Math.PI / 3;
+
 class Sensor{
 
     car: Car;
@@ -9,12 +13,12 @@ class Sensor{
 
     constructor(car: Car){
         this.car = car;
-        this.rayCount = 20;
-        this.rayLength = 200;
-        this.raySpread = 4*Math.PI/3;
+        this.rayCount = RAY_COUNT;
+        this.rayLength = RAY_LENGTH;
+        this.raySpread = RAY_SPREAD;
 
         this.rays = []; 
-        this.readings= [];
+        this.readings = [];
     }
 
     update(roadBorders: any,traffic: Car[]){
@@ -34,7 +38,7 @@ class Sensor{
     #getReading(ray: any,roadBorders: any,traffic: Car[]){
         let touches = [];
 
-        for(let i = 0; i < roadBorders.length;i++){
+        for(let i = 0; i < roadBorders.length; i++){
             const touch = getIntersection(
                 ray[0],
                 ray[1],
@@ -46,9 +50,9 @@ class Sensor{
             }
         }
 
-        for(let i = 0; i < traffic.length;i++){
+        for(let i = 0; i < traffic.length; i++){
             const poly = traffic[i].polygon;
-            for(let j = 0;j < poly.length;j++){
+            for(let j = 0; j < poly.length; j++){
                 const value = getIntersection(
                     ray[0],
                     ray[1],
@@ -64,32 +68,32 @@ class Sensor{
         if(touches.length == 0){
             return null;
         }else{
-            const offsets = touches.map(e=>e.offset);
+            const offsets = touches.map(e => e.offset);
             const minOffset = Math.min(...offsets);
-            return touches.find(e=>e.offset == minOffset);
+            return touches.find(e => e.offset == minOffset);
         }
     }
     #castRays(){
         this.rays = [];
-        for(let i = 0; i < this.rayCount;i++){
+        for(let i = 0; i < this.rayCount; i++){
             const rayAngle = lerp(
                 this.raySpread / 2,
                 -this.raySpread / 2,
-                this.rayCount == 1?0.5:i/(this.rayCount-1)
-            )+this.car.angle;
+                this.rayCount == 1 ? 0.5 : i / (this.rayCount - 1)
+            ) + this.car.angle;
 
-            const start = {x:this.car.x,y:this.car.y};
+            const start = {x:this.car.x, y:this.car.y};
             const end = {
-                x:this.car.x-
+                x:this.car.x -
                     Math.sin(rayAngle) * this.rayLength,
-                y:this.car.y-
-                    Math. cos(rayAngle) * this.rayLength
+                y:this.car.y -
+                    Math.cos(rayAngle) * this.rayLength
             };
             this.rays.push([start,end]);
         }
     }
     draw(ctx: any){
-        for(let i = 0;i < this.rayCount;i++){
+        for(let i = 0; i < this.rayCount; i++){
             let end = this.rays[i][1];
             if(this.readings[i]){
                 end = this.readings[i];
